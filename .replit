@@ -1,0 +1,21 @@
+modules = ["python-3.12"]
+run = "start"
+
+[nix]
+channel = "stable-24_05"
+packages = ["SDL2", "SDL2_image", "SDL2_mixer", "SDL2_ttf", "fontconfig", "freetype", "libjpeg", "libpng", "pkg-config", "portmidi"]
+
+[deployment]
+run = ["sh", "-c", "start"]
+
+[workflows]
+runButton = "Run Game"
+
+[[workflows.workflow]]
+name = "Run Game"
+author = 25461100
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python steve_game.py"
