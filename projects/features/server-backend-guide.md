@@ -13,15 +13,32 @@ This guide describes how to implement a server backend for a Python game with th
 ## 1. Project Structure
 ```
 hello-rpg/
-├── client/           # Game client code
-├── server/           # Server backend code
-│   ├── config.py     # Configuration (env vars, .env, or config file)
-│   ├── main.py       # Server entry point
-│   ├── db.py         # PostgreSQL interface
+├── client/                   # Game client code (UI, input, rendering)
+│   ├── __init__.py
+│   ├── main.py               # Client entry point
+│   ├── network.py            # Handles server discovery and communication
+│   ├── config.yaml           # Client-side configuration (YAML/JSON)
+│   └── ...
+├── server/                   # Server backend code (API, logic, DB)
+│   ├── __init__.py
+│   ├── main.py               # Server entry point
+│   ├── api/                  # API endpoints (REST/WebSocket)
+│   │   ├── __init__.py
+│   │   └── game.py           # Game-related endpoints
+│   ├── services/             # Business logic/services
+│   │   ├── __init__.py
+│   │   └── game_service.py   # Game logic implementation
+│   ├── db/                   # Database access layer
+│   │   ├── __init__.py
+│   │   └── models.py         # ORM models or SQL helpers
+│   ├── discovery/            # WLAN server discovery logic
+│   │   ├── __init__.py
+│   │   └── zeroconf_discovery.py
+│   ├── config.yaml           # Server-side configuration (YAML/JSON)
 │   └── ...
 ├── docker/
-│   └── Dockerfile    # Dockerfile for server
-├── .env              # Environment variables (for config)
+│   └── Dockerfile            # Dockerfile for server
+├── .env                      # Environment variables (for config)
 └── ...
 ```
 
@@ -86,12 +103,11 @@ if __name__ == '__main__':
 ---
 
 ## 4. Example: Configuration File
-```python
-# server/config.py
-import os
-HOST = os.getenv('SERVER_HOST', '0.0.0.0')
-PORT = int(os.getenv('SERVER_PORT', 5000))
-DB_URL = os.getenv('DATABASE_URL', 'postgresql://user:pass@localhost:5432/hello_rpg')
+```yaml
+# server/config.yaml
+SERVER_HOST: "0.0.0.0"
+SERVER_PORT: 5000
+DATABASE_URL: "postgresql://user:pass@localhost:5432/hello_rpg"
 ```
 
 ---
